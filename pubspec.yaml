@@ -4,7 +4,7 @@ version: 1.6.0
 homepage: https://github.com/wuweijian1997/FlutterCountdownTimer    #GitHub仓库地址
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   flutter:

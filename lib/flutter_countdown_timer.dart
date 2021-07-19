@@ -8,19 +8,19 @@ typedef CountdownTimerWidgetBuilder = Widget Function(
 
 /// A Countdown.
 class CountdownTimer extends StatefulWidget {
-  final int endTime;
+  final int? endTime;
   final Widget daysSymbol;
   final Widget hoursSymbol;
   final Widget minSymbol;
   final Widget secSymbol;
   final TextStyle textStyle;
-  final VoidCallback onEnd;
+  final VoidCallback? onEnd;
   final Widget emptyWidget;
-  final CountdownTimerWidgetBuilder widgetBuilder;
+  final CountdownTimerWidgetBuilder? widgetBuilder;
 
   CountdownTimer({
-    Key key,
-    this.endTime,
+    Key? key,
+      this.endTime,
     this.daysSymbol = const Text("Days "),
     this.hoursSymbol = const Text(":"),
     this.minSymbol = const Text(":"),
@@ -38,11 +38,11 @@ class CountdownTimer extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountdownTimer> {
-  CurrentRemainingTime currentRemainingTime = CurrentRemainingTime();
+  CurrentRemainingTime? currentRemainingTime = CurrentRemainingTime();
 
-  Timer _diffTimer;
+  Timer? _diffTimer;
 
-  VoidCallback get onEnd => widget.onEnd;
+  VoidCallback? get onEnd => widget.onEnd;
 
   TextStyle get textStyle => widget.textStyle;
 
@@ -75,7 +75,7 @@ class _CountDownState extends State<CountdownTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return widgetBuilder(context, currentRemainingTime);
+    return widgetBuilder(context, currentRemainingTime!);
   }
 
   Widget builderCountdownTimer(
@@ -90,14 +90,14 @@ class _CountDownState extends State<CountdownTimer> {
     );
   }
 
-  timeListBuild(CurrentRemainingTime time) {
+  timeListBuild(CurrentRemainingTime? time) {
     List<Widget> list = [];
     if (time == null) {
       list.add(emptyWidget);
       return list;
     }
     if (time.days != null) {
-      var days = _getNumberAddZero(time.days);
+      var days = _getNumberAddZero(time.days!);
       list.add(Text(days));
       list.add(daysSymbol);
     }
@@ -116,28 +116,27 @@ class _CountDownState extends State<CountdownTimer> {
   }
 
   String _getNumberAddZero(int number) {
-    assert(number != null);
     if (number < 10) {
       return "0" + number.toString();
     }
     return number.toString();
   }
 
-  void checkDateEnd(CurrentRemainingTime data) {
+  void checkDateEnd(CurrentRemainingTime? data) {
     if (data == null) {
       onEnd?.call();
       disposeDiffTimer();
     }
   }
 
-  CurrentRemainingTime getDateData() {
+  CurrentRemainingTime? getDateData() {
     if (widget.endTime == null) return null;
-    int diff = ((widget.endTime - DateTime.now().millisecondsSinceEpoch) / 1000)
+    int diff = ((widget.endTime! - DateTime.now().millisecondsSinceEpoch) / 1000)
         .floor();
     if (diff <= 0) {
       return null;
     }
-    int days, hours, min, sec;
+    int? days, hours, min, sec;
     if (diff >= 86400) {
       days = (diff / 86400).floor();
       diff -= days * 86400;
@@ -155,7 +154,7 @@ class _CountDownState extends State<CountdownTimer> {
   }
 
   timerDiffDate() {
-    CurrentRemainingTime data = getDateData();
+    CurrentRemainingTime? data = getDateData();
     setState(() {
       currentRemainingTime = data;
     });
@@ -166,7 +165,7 @@ class _CountDownState extends State<CountdownTimer> {
     const period = const Duration(seconds: 1);
     _diffTimer = Timer.periodic(period, (timer) {
       //到时回调
-      CurrentRemainingTime data = getDateData();
+      CurrentRemainingTime? data = getDateData();
       setState(() {
         currentRemainingTime = data;
       });
